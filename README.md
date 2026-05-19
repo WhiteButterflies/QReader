@@ -34,7 +34,10 @@ To install the QReader package locally, run pip
 ```bash
 python -m pip install --editable .
 ```
-
+To install CUDA, 继续 run
+```bash
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+```
 **NOTE:** If you're running **QReader** in a server with very limited resources, you may want to install the **CPU** version of [**PyTorch**](https://pytorch.org/get-started/locally/), before installing **QReader**. To do so, run: ``pip install torch --no-cache-dir`` (Thanks to [**@cjwalther**](https://github.com/Eric-Canas/QReader/issues/5) for his advice).
 
 ## Usage
@@ -61,6 +64,47 @@ decoded_text = qreader.detect_and_decode(image=image)
 
 > **NOTE**: Some entries can be `None`, it will happen when a **QR** have been detected but **couldn't be decoded**.
 
+
+## Logistics Label Video Reader
+
+This repository also includes a small OpenCV application for fixed-camera logistics labels, where the label can move
+through the frame and the QR code must be located in each video frame.
+
+Run it with a camera:
+
+```bash
+python tools/logistics_qr_video.py --source 0
+```
+
+Run it with a video file:
+
+```bash
+python tools/logistics_qr_video.py --source path/to/video.mp4
+```
+
+Useful options:
+
+```bash
+# Limit detection to a fixed camera region, in x,y,width,height coordinates.
+python tools/logistics_qr_video.py --source 0 --roi 120,80,900,520
+
+# Save annotated video and decoded QR records.
+python tools/logistics_qr_video.py --source path/to/video.mp4 --output annotated.mp4 --csv decoded.csv
+
+# Speed up processing by using the nano model, GPU, and detecting every 3 frames.
+python tools/logistics_qr_video.py --source 0 --model-size n --device cuda:0 --detect-every 3 --max-width 960
+
+# Use a specific Chinese font if the auto-detected system font is not suitable.
+python tools/logistics_qr_video.py --source 0 --font C:\Windows\Fonts\msyh.ttc
+
+# Control the initial preview size and wrap long QR text in the overlay.
+python tools/logistics_qr_video.py --source 0 --display-width 1280 --display-height 900 --text-max-lines 6
+```
+
+The preview window draws the QR polygon, bounding box, current FPS, and last decoded value. Press `q` or `Esc` to stop.
+For a fixed camera over a conveyor or sliding logistics label, keep `--roi` around the area where the label appears; the
+QR can still translate within that ROI. The preview window is resizable; `--display-width` and `--display-height` only
+change the preview size, not the saved output video resolution.
 
 ## API Reference
 

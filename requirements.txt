@@ -2,3 +2,4 @@ opencv-python
 numpy
 pyzbar
 qrdet>=2.5
+pillow

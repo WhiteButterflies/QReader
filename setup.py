@@ -22,6 +22,7 @@ setup(
         "opencv-python",
         "pyzbar",
         "qrdet>=2.5",
+        "pillow",
     ],
     extras_require={
         "tests": ["mypy", "pytest", "qrcode"],
