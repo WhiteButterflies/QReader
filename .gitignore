@@ -1,5 +1,5 @@
 __yolo_v3_qr_detector/__pycache__/
-.idea/
+#.idea/
 Private Instructions.md
 dist/
 qreader.egg-info/
